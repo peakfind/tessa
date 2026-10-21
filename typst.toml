@@ -1,0 +1,18 @@
+# Package manifest — Typst reads this to treat the folder as a package.
+# With this file present, you can later do:
+#   typst init @local/tessa:0.1.0
+# or publish to Typst Universe.
+
+[package]
+name = "tessa"
+version = "0.1.0"
+entrypoint = "src/lib.typ"
+authors = ["jyzhang"]
+license = "MIT"
+description = "A LaTeX-style template for lecture and study notes."
+
+# The [template] section marks a subdirectory as a starter project.
+# `typst init` copies that folder when a user starts a new document.
+[template]
+path = "template"
+entrypoint = "main.typ"
