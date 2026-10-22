@@ -12,8 +12,10 @@
 
 The boundary element method (BEM) reformulates a partial differential
 equation as an *integral equation over the boundary* of the domain,
-reducing the dimensionality of the discretization problem by one.
+reducing the dimensionality of the discretization problem by one
+@Steinbach @Sauter.
 It is just a draft version.
+
 = Potential Theory
 
 == Fundamental Solutions
@@ -62,3 +64,5 @@ It is just a draft version.
   $ 1/2 g(bold(x)) = integral_Gamma G(bold(x), bold(y)) q(bold(y)) dif Gamma_y
     - integral.slash_Gamma g(bold(y)) (partial G)/(partial n)(bold(x), bold(y)) dif Gamma_y. $
 ]
+
+#bibliography("refs.bib")
