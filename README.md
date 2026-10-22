@@ -1,28 +1,7 @@
 # tessa
 
-A LaTeX-style Typst template for lecture and study notes.
-
-## Usage
-
-```typst
-#import "@local/tessa:0.1.0": *
-
-#show: tessa.with(
-  title: "My Course Notes",
-  author: "Your Name",
-  course: "MATH 301",   // optional
-)
-
-= First Section
-
-#theorem(title: "Optional Name")[
-  Statement of the theorem.
-]
-
-#proof[
-  Proof goes here; a QED square is added automatically.
-]
-```
+**T**ypst **E**legant **S**tructured **S**tudy **A**rchive — a LaTeX-style
+Typst template for lecture and study notes.
 
 ## Provided environments
 
@@ -37,8 +16,30 @@ A LaTeX-style Typst template for lecture and study notes.
 | `#remark`     | upright body, shared numbering |
 | `#proof`      | "Proof." … □                   |
 
-All theorem-like environments share one counter, numbered per section
-("Theorem 2.3" = 3rd theorem-like environment in section 2).
+All theorem-like environments share one counter, numbered per chapter
+("Theorem 2.3" = 3rd theorem-like environment in chapter 2).
+
+## Document structure
+
+`tessa` produces a LaTeX-book-style document: title page, table of
+contents (roman page numbers), then main matter with arabic numbering.
+
+- `= Chapter` — starts a new page, resets theorem numbering
+- `== Section`, `=== Subsection` — numbered `1.1`, `1.1.1`
+- `==== Subsubsection` — unnumbered run-in heading
+- `#heading(level: 1, numbering: none)[Preface]` — unnumbered chapter
+  that still appears in the table of contents
+
+## References
+
+Keep a BibTeX file next to your document, cite with `@key`, and place
+the bibliography at the end:
+
+```typst
+The presentation follows @rudin1976.
+
+#bibliography("refs.bib")   // prints an unnumbered "References" chapter
+```
 
 ## Development
 
