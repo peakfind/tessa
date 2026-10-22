@@ -1,6 +1,21 @@
 // ============================================================
-// tessa — a LaTeX-style template for lecture and study notes
+// tessa — Typst Elegant Structured Study Archive
+// A LaTeX-book-style template for lecture and study notes.
 // ============================================================
+//
+// Document structure produced by this template:
+//
+//   1. Title page        (no header, page number hidden)
+//   2. Table of contents (front matter, pages numbered i, ii, ...)
+//   3. Main matter       (chapters etc., pages restart at 1, 2, ...)
+//   4. Bibliography      (placed by the user with #bibliography(...))
+//
+// Heading depth, following LaTeX's book-class defaults:
+//
+//   = Chapter          "Chapter 1", starts a new page, resets theorems
+//   == Section         numbered 1.1
+//   === Subsection     numbered 1.1.1
+//   ==== Subsubsection NOT numbered (like LaTeX's \paragraph)
 //
 // How a Typst template works:
 //   A template is just a *function* that takes the document body
@@ -26,14 +41,14 @@
 // Everything in Typst is *content*; functions return content.
 // ------------------------------------------------------------
 #let thm-env(kind, style, supplement: none, body) = {
-  // `locate` gives access to the current position in the document,
-  // needed here to read the section number for "Theorem 2.3" style
-  // numbering. In Typst 0.12+ this is written with `context`.
+  // `context` gives access to document state at the current position,
+  // needed here to read the chapter number for "Theorem 2.3" style
+  // numbering.
   context {
-    // Read the current heading counter, e.g. (2, 1) for section 2.1.
-    // (Named `hc`, not `h` — `h` is Typst's horizontal-space function!)
+    // Read the current heading counter, e.g. (2, 1) for chapter 2,
+    // section 1. (Named `hc`, not `h` — `h` is Typst's spacing function!)
     let hc = counter(heading).get()
-    let section = if hc.len() > 0 { str(hc.first()) + "." } else { "" }
+    let chapter = if hc.len() > 0 { str(hc.first()) + "." } else { "" }
 
     // Advance the shared theorem counter and read its new value.
     thm-counter.step()
@@ -44,7 +59,7 @@
       inset: (top: 0.4em, bottom: 0.4em),
       {
         // Bold header: "Theorem 2.1 (name)". `strong` = bold.
-        strong(kind + " " + section + n)
+        strong(kind + " " + chapter + n)
         if supplement != none { strong[ (#supplement)] }
         strong[.]
         h(0.5em) // `h` = horizontal space
@@ -97,7 +112,8 @@
   title: "Untitled Notes",
   author: "Anonymous",
   date: datetime.today().display("[month repr:long] [day], [year]"),
-  course: none,        // e.g. "MATH 251" — shown above the title
+  course: none,        // e.g. "MATH 251" — shown on the title page
+  toc: true,           // whether to include a table of contents
   body,
 ) = {
   // ---- Document metadata (used by PDF viewers) ----
@@ -108,12 +124,15 @@
     paper: "a4",
     margin: (x: 2.5cm, y: 2.5cm),
     // Header/footer use `context` to access per-page info.
+    // counter(page).display() with no argument respects the page's
+    // `numbering` setting, so front matter shows i, ii and the main
+    // matter shows 1, 2 automatically.
     header: context {
       if counter(page).get().first() > 1 {
         set text(9pt)
         emph(title)
         h(1fr)
-        counter(page).display("1")
+        counter(page).display()
         v(-0.6em)
         line(length: 100%, stroke: 0.4pt)
       }
@@ -129,34 +148,79 @@
   // ---- Math ----
   set math.equation(numbering: "(1)")
 
+  // ---- Bibliography default heading text ----
+  set bibliography(title: "References")
+
   // ---- Headings ----
-  // Numbered "1.1.1" like LaTeX sections/subsections.
+  // Number chapters, sections, subsections — but not deeper.
   set heading(numbering: "1.1.1")
-  // A *show rule* restyles matching elements. Here: headings.
-  // Level 1 headings get extra space and a slightly larger size.
+
+  // Chapter (level 1): starts a new page, "Chapter N" above the title,
+  // and resets the theorem counter so "Theorem 2.3" means "3rd
+  // theorem-like environment in chapter 2".
   show heading.where(level: 1): it => {
-    // Reset the theorem counter at each new section so numbers
-    // like "Theorem 2.3" mean "3rd theorem in section 2".
+    pagebreak(weak: true)
     thm-counter.update(0)
-    v(1.2em, weak: true)
+    v(1cm)
+    if it.numbering != none {
+      text(14pt)[Chapter #counter(heading).display("1")]
+      v(0.6em)
+    }
+    text(20pt, strong(it.body))
+    v(1cm)
+  }
+
+  // Section (level 2) and subsection (level 3): sized like LaTeX.
+  // `it` renders the heading with its number automatically.
+  show heading.where(level: 2): it => {
+    v(1em, weak: true)
     text(14pt, strong(it))
     v(0.4em, weak: true)
   }
-  show heading.where(level: 2): it => {
-    v(1em, weak: true)
-    text(12.5pt, strong(it))
+  show heading.where(level: 3): it => {
+    v(0.8em, weak: true)
+    text(12pt, strong(it))
     v(0.3em, weak: true)
   }
 
-  // ---- Title block (only on the first page, above the body) ----
-  align(center)[
-    #if course != none { text(10pt)[#smallcaps(course)]; v(0.5em) }
-    #text(17pt, strong(title))
-    #v(0.8em)
-    #author \
-    #text(10pt, date)
-  ]
-  v(1.5em)
+  // Subsubsection (level 4): unnumbered bold run-in heading.
+  show heading.where(level: 4): it => {
+    v(0.6em, weak: true)
+    strong(it.body)
+    v(0.2em, weak: true)
+  }
+
+  // ---- Title page ----
+  // Set rules inside a block `{...}` revert when the block ends, so the
+  // "no header" setting applies only to this page. This is the standard
+  // Typst pattern for a cover page.
+  {
+    set page(header: none)
+    v(2.5cm)
+    align(center)[
+      #if course != none { smallcaps(text(12pt, course)); v(1.5em) }
+      #text(24pt, strong(title))
+      #v(2.5em)
+      #text(12pt, author) \
+      #text(11pt, date)
+    ]
+  }
+
+  // ---- Front matter: table of contents ----
+  // Roman page numbers here; arabic numbering restarts at the first
+  // chapter below.
+  if toc {
+    {
+      set page(numbering: "i")
+      outline(title: [Contents], depth: 3, indent: auto)
+    }
+  }
+
+  // Start the main matter: new page, page counter back to 1.
+  // The chapter show rule's `pagebreak(weak: true)` means we won't get
+  // a second, empty page before Chapter 1.
+  pagebreak(weak: true)
+  counter(page).update(1)
 
   // ---- The user's document content goes here ----
   body
