@@ -9,7 +9,20 @@
   course: "MATH 301",
 )
 
+// ---- Preface (optional) ----
+// An unnumbered front-matter chapter: it appears in the table of
+// contents but gets no chapter number. Use it for prefaces,
+// acknowledgments, "how to read these notes", etc.
+#heading(level: 1, numbering: none)[Preface]
+
+These notes were typeset with tessa.
+
 = Limits and Continuity
+
+== The Limit of a Function
+
+// Cite a bibliography entry with @key — the key comes from refs.bib.
+The presentation here follows @rudin1976.
 
 #definition(title: "Limit")[
   Let $f : RR -> RR$ and $a in RR$. We say $lim_(x -> a) f(x) = L$ if
@@ -37,11 +50,18 @@
   exactly the statement $lim_(x -> a) f(x) = f(a)$.
 ]
 
+=== A worked case
+
 #example[
   $f(x) = x^2$ is continuous everywhere, since
   $|x^2 - a^2| = |x - a| |x + a|$ can be made small by taking $x$
   close to $a$.
 ]
+
+==== Why no number here?
+
+A level-4 heading is an unnumbered run-in heading, like LaTeX's
+`paragraph` — handy for small asides that don't belong in the TOC.
 
 = Sequences
 
@@ -49,3 +69,7 @@
   A sequence $(a_n)$ *converges* to $L$ if for every $epsilon > 0$
   there is $N in NN$ with $|a_n - L| < epsilon$ for all $n >= N$.
 ]
+
+// ---- References ----
+// Prints an unnumbered "References" chapter listing every cited entry.
+#bibliography("refs.bib")
