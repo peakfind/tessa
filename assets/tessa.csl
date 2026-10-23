@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- tessa.csl — numeric bibliography style for the tessa Typst template.
+     Modeled after biblatex with:
+       style=numeric, giveninits=true, url=false, isbn=false,
+       month suppressed, no "In:", article titles unquoted. -->
+<style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" demote-non-dropping-particle="never" default-locale="en-US">
+  <info>
+    <title>tessa</title>
+    <id>https://github.com/peakfind/tessa/assets/tessa.csl</id>
+    <link href="https://github.com/peakfind/tessa" rel="self"/>
+    <author>
+      <name>jyzhang</name>
+    </author>
+    <category citation-format="numeric"/>
+    <category field="math"/>
+    <updated>2026-10-23T00:00:00+00:00</updated>
+  </info>
+
+  <!-- Authors as initials: "A.-S. Bonnet-Bendhia and F. Starling";
+       more than 3 authors → first 3 + "et al." (biblatex maxnames=3) -->
+  <macro name="author">
+    <names variable="author">
+      <name and="text" delimiter=", " initialize-with=". " et-al-min="4" et-al-use-first="3"/>
+      <substitute>
+        <names variable="editor"/>
+      </substitute>
+    </names>
+  </macro>
+
+  <!-- Only the year is ever rendered (biblatex: month cleared) -->
+  <macro name="year">
+    <date variable="issued">
+      <date-part name="year"/>
+    </date>
+  </macro>
+
+  <!-- Book and online titles italic; article titles plain, unquoted -->
+  <macro name="title">
+    <choose>
+      <if type="book webpage post-weblog" match="any">
+        <text variable="title" font-style="italic"/>
+      </if>
+      <else>
+        <text variable="title"/>
+      </else>
+    </choose>
+  </macro>
+
+  <macro name="doi">
+    <text variable="DOI" prefix="DOI: "/>
+  </macro>
+
+  <!-- "pp. 305–338" for ranges, "p. 065601" for single pages -->
+  <macro name="pages">
+    <group delimiter=" ">
+      <label variable="page" form="short"/>
+      <text variable="page"/>
+    </group>
+  </macro>
+
+  <!-- Article: *Journal* vol.issue (year), pp. pages -->
+  <macro name="article-body">
+    <group delimiter=", ">
+      <group delimiter=" ">
+        <text variable="container-title" font-style="italic"/>
+        <group delimiter=".">
+          <text variable="volume"/>
+          <text variable="issue"/>
+        </group>
+        <date variable="issued" prefix="(" suffix=")">
+          <date-part name="year"/>
+        </date>
+      </group>
+      <text macro="pages"/>
+    </group>
+  </macro>
+
+  <!-- Book: edition. Vol. N. Series. Publisher, Place, Year, pp. total -->
+  <macro name="book-body">
+    <group delimiter=". ">
+      <group delimiter=" ">
+        <number variable="edition" form="ordinal"/>
+        <text term="edition" form="short"/>
+      </group>
+      <group delimiter=" ">
+        <label variable="volume" form="short" text-case="capitalize-first"/>
+        <text variable="volume"/>
+      </group>
+      <text variable="collection-title"/>
+      <group delimiter=", ">
+        <text variable="publisher"/>
+        <text variable="publisher-place"/>
+        <text macro="year"/>
+        <text variable="page" prefix="pp. "/>
+      </group>
+    </group>
+  </macro>
+
+  <!-- In-text citation: [1], collapsing to [1–3] -->
+  <citation collapse="citation-number">
+    <sort>
+      <key variable="citation-number"/>
+    </sort>
+    <layout prefix="[" suffix="]" delimiter=", ">
+      <text variable="citation-number"/>
+    </layout>
+  </citation>
+
+  <!-- Bibliography: sorted alphabetically by author, [n] hanging label -->
+  <bibliography entry-spacing="0" second-field-align="flush">
+    <sort>
+      <key macro="author"/>
+      <key variable="issued"/>
+      <key variable="title"/>
+    </sort>
+    <layout suffix=".">
+      <text variable="citation-number" prefix="[" suffix="]"/>
+      <group delimiter=". ">
+        <text macro="author"/>
+        <text macro="title"/>
+        <choose>
+          <if type="book" match="any">
+            <text macro="book-body"/>
+          </if>
+          <else-if type="article-journal" match="any">
+            <text macro="article-body"/>
+          </else-if>
+          <else>
+            <!-- best effort for online/misc: Year. arXiv: id -->
+            <group delimiter=". ">
+              <text macro="year"/>
+              <group delimiter=": ">
+                <text variable="archive"/>
+                <text variable="archive_location"/>
+              </group>
+            </group>
+          </else>
+        </choose>
+        <text macro="doi"/>
+      </group>
+    </layout>
+  </bibliography>
+</style>
