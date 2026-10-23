@@ -125,6 +125,26 @@
   }
 }
 
+/// Customize the style of references.
+/// `style: auto` uses tessa's own CSL asset; any other value 
+/// (built-in name or .csl path) passes through unchanged.
+#let tessa-bib-style(
+  title: "References",
+  style: auto,
+  full: false, // true -> list all entries even uncited
+  body
+) = {
+  set bibliography(
+    title: title,
+    full: full,
+    style: if style == auto {"../assets/tessa.csl"} else { style }
+  )
+  
+  // Layout, tweak by Typst
+  show bibliography: set text(10pt)
+  body
+}
+
 // ------------------------------------------------------------
 // The main template function.
 // Parameters with defaults are optional; the trailing `body`
@@ -170,7 +190,7 @@
   // ---- Math ----
   set math.equation(numbering: "(1)")
 
-  // ---- Bibliography default heading text ----
+  // ---- Bibliography ----
   set bibliography(title: "References")
 
   // ---- Headings ----

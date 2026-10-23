@@ -51,4 +51,4 @@ A numbered equation:
 $ integral_a^b f(x) dif x = F(b) - F(a) $
 
 // Bibliography heading renders unnumbered as "References".
-#bibliography("refs.bib")
+#tessa-bib-style(style: "ieee")[#bibliography("refs.bib")]
