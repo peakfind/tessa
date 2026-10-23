@@ -41,6 +41,21 @@ The presentation follows @rudin1976.
 #bibliography("refs.bib")   // prints an unnumbered "References" chapter
 ```
 
+## Fonts
+
+| Role | Font | Why | Availability |
+|------|------|-----|--------------|
+| Body text | New Computer Modern | Unicode port of Computer Modern — the LaTeX look | bundled with Typst |
+| Body fallback | Libertinus Serif | Typst's default serif | bundled with Typst |
+| Math | New Computer Modern Math | Typst's default math font; matches the body | bundled with Typst |
+| DOI in references | LMMono10 (Latin Modern Mono) | descendant of cmtt10 — LaTeX's `\texttt` | **system font — not bundled** |
+| Code (`` `raw` ``) | DejaVu Sans Mono | Typst's built-in monospace | bundled with Typst |
+
+Note: "bundled" means the font is embedded in the Typst binary and works
+everywhere. LMMono10 comes from the operating system (e.g. macOS ships
+Latin Modern), so on machines without it the DOI falls back to DejaVu
+Sans Mono via the font fallback chain in `tessa-bib-style`.
+
 ## Development
 
 ```sh
