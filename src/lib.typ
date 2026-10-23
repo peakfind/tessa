@@ -103,6 +103,28 @@
   )
 }
 
+/// Renders a standalone cover page (no header) with title, author,
+/// optional institute, and date. All text parameters accept content.
+#let title-page(
+  date,
+  title: "TBD",
+  author: "Anonymous",
+  institute: none,
+) = {
+  { // block scope: page settings revert after the cover
+    set page(header: none)
+    v(2.5cm)
+    align(center)[
+      #text(24pt, strong(title))
+      #v(2.5em)
+      #text(12pt, strong(author)) \
+      #if institute != none { text(12pt, institute); linebreak() }
+      #v(1em)
+      #text(11pt, date)
+    ]
+  }
+}
+
 // ------------------------------------------------------------
 // The main template function.
 // Parameters with defaults are optional; the trailing `body`
@@ -112,7 +134,7 @@
   title: "Untitled Notes",
   author: "Anonymous",
   date: datetime.today().display("[month repr:long] [day], [year]"),
-  course: none,        // e.g. "MATH 251" — shown on the title page
+  institute: none,       
   toc: true,           // whether to include a table of contents
   body,
 ) = {
@@ -120,24 +142,24 @@
   set document(title: title, author: author)
 
   // ---- Page setup ----
-  set page(
-    paper: "a4",
-    margin: (x: 2.5cm, y: 2.5cm),
-    // Header/footer use `context` to access per-page info.
-    // counter(page).display() with no argument respects the page's
-    // `numbering` setting, so front matter shows i, ii and the main
-    // matter shows 1, 2 automatically.
-    header: context {
-      if counter(page).get().first() > 1 {
-        set text(9pt)
-        emph(title)
-        h(1fr)
-        counter(page).display()
-        v(-0.6em)
-        line(length: 100%, stroke: 0.4pt)
-      }
-    },
-  )
+   set page(
+     paper: "a4",
+     margin: (x: 2.5cm, y: 2.5cm),
+     // Header/footer use `context` to access per-page info.
+     // counter(page).display() with no argument respects the page's
+     // `numbering` setting, so front matter shows i, ii and the main
+     // matter shows 1, 2 automatically.
+     header: context {
+       if counter(page).get().first() > 1 {
+         set text(9pt)
+         emph(title)
+         h(1fr)
+         counter(page).display()
+         v(-0.6em)
+         line(length: 100%, stroke: 0.4pt)
+       }
+     },
+   )
 
   // ---- Text setup ----
   // New Computer Modern is the open-source Computer Modern —
@@ -191,20 +213,7 @@
   }
 
   // ---- Title page ----
-  // Set rules inside a block `{...}` revert when the block ends, so the
-  // "no header" setting applies only to this page. This is the standard
-  // Typst pattern for a cover page.
-  {
-    set page(header: none)
-    v(2.5cm)
-    align(center)[
-      #if course != none { smallcaps(text(12pt, course)); v(1.5em) }
-      #text(24pt, strong(title))
-      #v(2.5em)
-      #text(12pt, author) \
-      #text(11pt, date)
-    ]
-  }
+  title-page(date, title: title, author: author, institute: institute)
 
   // ---- Front matter: table of contents ----
   // Roman page numbers here; arabic numbering restarts at the first

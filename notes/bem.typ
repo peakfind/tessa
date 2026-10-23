@@ -4,8 +4,8 @@
 
 #show: tessa.with(
   title: "Boundary Element Methods",
-  author: "jyzhang",
-  course: "Computational Mechanics",
+  author: "ZHANG JIAYI",
+  institute: "CityU HK",
 )
 
 = Introduction

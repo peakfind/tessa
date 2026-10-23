@@ -6,7 +6,7 @@
 #show: tessa.with(
   title: "Real Analysis",
   author: "Ada Lovelace",
-  course: "MATH 301",
+  institute: "CityU HK",
 )
 
 // ---- Preface (optional) ----

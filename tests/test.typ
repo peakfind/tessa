@@ -7,7 +7,7 @@
 #show: tessa.with(
   title: "Template Test",
   author: "Test Author",
-  course: "TEST 000",
+  institute: "CityU HK",
 )
 
 // Unnumbered front-matter chapter: no "Chapter" label, but in the TOC.
