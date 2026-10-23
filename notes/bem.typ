@@ -2,6 +2,8 @@
 // Compile with:  just bem   (or: typst watch notes/bem.typ)
 #import "../src/lib.typ": *
 
+#show: tessa-bib-style
+
 #show: tessa.with(
   title: "Boundary Element Methods",
   author: "ZHANG JIAYI",
@@ -54,6 +56,8 @@ It is just a draft version.
   $Omega without B_epsilon(bold(x))$ and let $epsilon -> 0$.
   The integral over $partial B_epsilon$ contributes $u(bold(x))$.
 ]
+
+@Duffy1982 Duffy's trick to treat singularities at corners.
 
 = Boundary Integral Equations
 
