@@ -140,8 +140,15 @@
     style: if style == auto {"../assets/tessa.csl"} else { style }
   )
   
-  // Layout, tweak by Typst
-  show bibliography: set text(10pt)
+  // Layout layer: smaller entries, DOI links in teal.
+  // A show rule inside a show rule: the link styling is scoped to the
+  // bibliography only — links elsewhere in the document are unaffected.
+  show bibliography: it => {
+    set text(10pt)
+    show regex("DOI:"): set text(font: ("LMMono10", "DejaVu Sans Mono"))
+    show link: set text(teal, font: ("LMMono10", "DejaVu Sans Mono"))
+    it
+  }
   body
 }
 
