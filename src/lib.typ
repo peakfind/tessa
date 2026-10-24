@@ -193,6 +193,20 @@
   // the classic LaTeX font. Falls back to Typst's default if missing.
   set text(font: ("New Computer Modern", "Libertinus Serif"), size: 11pt, lang: "en")
   set par(justify: true, leading: 0.65em)
+  
+  // ---- Color for @cite, @ref, and tocs ----
+  show cite: set text(navy)
+  show ref: set text(navy)
+  show outline.entry: set text(navy)
+  
+  // ---- External URLs
+  show link: it => {
+    if type(it.dest) == str {
+      text(teal, it) // external
+    } else {
+      it             // internal
+    }
+  }
 
   // ---- Math ----
   set math.equation(numbering: "(1)")

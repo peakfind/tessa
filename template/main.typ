@@ -28,7 +28,14 @@ The presentation here follows @rudin1976.
   Let $f : RR -> RR$ and $a in RR$. We say $lim_(x -> a) f(x) = L$ if
   for every $epsilon > 0$ there exists $delta > 0$ such that
   $ 0 < |x - a| < delta quad ==> quad |f(x) - L| < epsilon. $
-]
+] <def:limit>
+
+$
+  f(x) = x^(2).
+$ <eq:f>
+
+@eq:f
+
 
 #theorem(title: "Squeeze Theorem")[
   If $g(x) <= f(x) <= h(x)$ near $a$ and
