@@ -26,6 +26,8 @@
 //   `tessa.with(...)` produces a new function with the arguments
 //   filled in; `#show:` applies it to the whole document.
 
+#import "_pages.typ": title-page
+#import "_style.typ": tessa-bib-style, tessa-link-style
 // ------------------------------------------------------------
 // Counter shared by all theorem-like environments, so that
 // "Theorem 3" and "Definition 4" share one numbering sequence
@@ -103,55 +105,6 @@
   )
 }
 
-/// Renders a standalone cover page (no header) with title, author,
-/// optional institute, and date. All text parameters accept content.
-#let title-page(
-  date,
-  title: "TBD",
-  author: "Anonymous",
-  institute: none,
-) = {
-  { // block scope: page settings revert after the cover
-    set page(header: none)
-    v(2.5cm)
-    align(center)[
-      #text(24pt, strong(title))
-      #v(2.5em)
-      #text(12pt, strong(author)) \
-      #if institute != none { text(12pt, institute); linebreak() }
-      #v(1em)
-      #text(11pt, date)
-    ]
-  }
-}
-
-/// Customize the style of references.
-/// `style: auto` uses tessa's own CSL asset; any other value 
-/// (built-in name or .csl path) passes through unchanged.
-#let tessa-bib-style(
-  title: "References",
-  style: auto,
-  full: false, // true -> list all entries even uncited
-  body
-) = {
-  set bibliography(
-    title: title,
-    full: full,
-    style: if style == auto {"../assets/tessa.csl"} else { style }
-  )
-  
-  // Layout layer: smaller entries, DOI links in teal.
-  // A show rule inside a show rule: the link styling is scoped to the
-  // bibliography only — links elsewhere in the document are unaffected.
-  show bibliography: it => {
-    set text(10pt)
-    show regex("DOI:"): set text(font: ("LMMono10", "DejaVu Sans Mono"))
-    show link: set text(teal, font: ("LMMono10", "DejaVu Sans Mono"))
-    it
-  }
-  body
-}
-
 // ------------------------------------------------------------
 // The main template function.
 // Parameters with defaults are optional; the trailing `body`
@@ -194,20 +147,7 @@
   set text(font: ("New Computer Modern", "Libertinus Serif"), size: 11pt, lang: "en")
   set par(justify: true, leading: 0.65em)
   
-  // ---- Color for @cite, @ref, and tocs ----
-  show cite: set text(navy)
-  show ref: set text(navy)
-  show outline.entry: set text(navy)
-  
-  // ---- External URLs
-  show link: it => {
-    if type(it.dest) == str {
-      text(teal, it) // external
-    } else {
-      it             // internal
-    }
-  }
-
+  show: tessa-link-style
   // ---- Math ----
   set math.equation(numbering: "(1)")
 
