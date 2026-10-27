@@ -1,3 +1,8 @@
+// ============================================================
+// _pages.typ — internal: whole-page content makers.
+// Currently: the cover. Later: contents-page, index, ...
+// ============================================================
+
 /// Renders a standalone cover page (no header) with title, author,
 /// optional institute, and date. All text parameters accept content.
 #let title-page(

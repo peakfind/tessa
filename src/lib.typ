@@ -25,10 +25,19 @@
 //
 //   `tessa.with(...)` produces a new function with the arguments
 //   filled in; `#show:` applies it to the whole document.
+//
+// Module map (only this file is the public API; the underscore
+// modules are internal):
+//
+//   lib.typ        tessa() + re-exports
+//   _pages.typ     whole-page makers: title-page
+//   _style.typ     styling functions: tessa-heading-style,
+//                  tessa-link-style, tessa-bib-style
+//   _theorems.typ  theorem environments + proof
 
 #import "_pages.typ": title-page
-#import "_style.typ": tessa-bib-style, tessa-link-style
-#import "_theorems.typ": theorem, lemma, definition, remark, proof, thm-reset
+#import "_style.typ": tessa-heading-style, tessa-bib-style, tessa-link-style
+#import "_theorems.typ": theorem, lemma, definition, remark, proof
 
 // ------------------------------------------------------------
 // The main template function.
@@ -80,43 +89,7 @@
   set bibliography(title: "References")
 
   // ---- Headings ----
-  // Number chapters, sections, subsections — but not deeper.
-  set heading(numbering: "1.1.1")
-
-  // Chapter (level 1): starts a new page, "Chapter N" above the title,
-  // and resets the theorem counter so "Theorem 2.3" means "3rd
-  // theorem-like environment in chapter 2".
-  show heading.where(level: 1): it => {
-    pagebreak(weak: true)
-    thm-reset()
-    v(1cm)
-    if it.numbering != none {
-      text(14pt)[Chapter #counter(heading).display("1")]
-      v(0.6em)
-    }
-    text(20pt, strong(it.body))
-    v(1cm)
-  }
-
-  // Section (level 2) and subsection (level 3): sized like LaTeX.
-  // `it` renders the heading with its number automatically.
-  show heading.where(level: 2): it => {
-    v(1em, weak: true)
-    text(14pt, strong(it))
-    v(0.4em, weak: true)
-  }
-  show heading.where(level: 3): it => {
-    v(0.8em, weak: true)
-    text(12pt, strong(it))
-    v(0.3em, weak: true)
-  }
-
-  // Subsubsection (level 4): unnumbered bold run-in heading.
-  show heading.where(level: 4): it => {
-    v(0.6em, weak: true)
-    strong(it.body)
-    v(0.2em, weak: true)
-  }
+  show: tessa-heading-style
 
   // ---- Title page ----
   title-page(date, title: title, author: author, institute: institute)
