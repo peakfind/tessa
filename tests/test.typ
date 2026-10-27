@@ -24,12 +24,11 @@ A preface paragraph.
 #definition[First definition — shares the counter, so "Definition 1.2".]
 #lemma[A lemma — "Lemma 1.3".]
 #proof[A proof with a QED square at the right margin.]
-#corollary[Corollary.]
-#proposition[Proposition.]
 
 == A Section
 
-#example(title: "Named")[An example with a title.]
+#theorem(note: "Test for tessa")[It it a test for our new theorem environment.]
+
 #remark[A remark.]
 
 === A Subsection

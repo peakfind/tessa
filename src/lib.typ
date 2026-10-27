@@ -28,82 +28,7 @@
 
 #import "_pages.typ": title-page
 #import "_style.typ": tessa-bib-style, tessa-link-style
-// ------------------------------------------------------------
-// Counter shared by all theorem-like environments, so that
-// "Theorem 3" and "Definition 4" share one numbering sequence
-// (like amsthm's default). Counters in Typst are stateful and
-// advance via `counter.step()` or `counter.update(n + 1)`.
-// ------------------------------------------------------------
-#let thm-counter = counter("thm")
-
-// ------------------------------------------------------------
-// Helper: one theorem-like environment ("Theorem", "Definition", ...).
-// `kind`  — the displayed name, e.g. "Theorem"
-// `style` — "plain" (italic body, like amsthm) or "definition" (upright)
-// Everything in Typst is *content*; functions return content.
-// ------------------------------------------------------------
-#let thm-env(kind, style, supplement: none, body) = {
-  // `context` gives access to document state at the current position,
-  // needed here to read the chapter number for "Theorem 2.3" style
-  // numbering.
-  context {
-    // Read the current heading counter, e.g. (2, 1) for chapter 2,
-    // section 1. (Named `hc`, not `h` — `h` is Typst's spacing function!)
-    let hc = counter(heading).get()
-    let chapter = if hc.len() > 0 { str(hc.first()) + "." } else { "" }
-
-    // Advance the shared theorem counter and read its new value.
-    thm-counter.step()
-    let n = thm-counter.display()
-
-    block(
-      width: 100%,
-      inset: (top: 0.4em, bottom: 0.4em),
-      {
-        // Bold header: "Theorem 2.1 (name)". `strong` = bold.
-        strong(kind + " " + chapter + n)
-        if supplement != none { strong[ (#supplement)] }
-        strong[.]
-        h(0.5em) // `h` = horizontal space
-        if style == "plain" {
-          emph(body) // italic body, amsthm's "plain" style
-        } else {
-          body
-        }
-      },
-    )
-  }
-}
-
-// The public environments the user calls in their document.
-// Each is a thin wrapper; `title` is the optional parenthesized name.
-#let theorem(title: none, body) = thm-env("Theorem", "plain", supplement: title, body)
-#let lemma(title: none, body) = thm-env("Lemma", "plain", supplement: title, body)
-#let corollary(title: none, body) = thm-env("Corollary", "plain", supplement: title, body)
-#let proposition(title: none, body) = thm-env("Proposition", "plain", supplement: title, body)
-#let definition(title: none, body) = thm-env("Definition", "definition", supplement: title, body)
-#let example(title: none, body) = thm-env("Example", "definition", supplement: title, body)
-#let remark(title: none, body) = thm-env("Remark", "definition", supplement: title, body)
-
-// ------------------------------------------------------------
-// Proof environment: italic "Proof." followed by the body, ending
-// with an open QED square pushed to the right margin — like amsthm.
-// ------------------------------------------------------------
-#let proof(body) = {
-  block(
-    width: 100%,
-    inset: (top: 0.4em, bottom: 0.4em),
-    {
-      emph[Proof.]
-      h(0.5em)
-      body
-      // `h(1fr)` is a spring: it expands to fill remaining space,
-      // pushing the square to the right edge.
-      h(1fr)
-      $square.stroked$
-    },
-  )
-}
+#import "_theorems.typ": theorem, lemma, definition, remark, proof, thm-reset
 
 // ------------------------------------------------------------
 // The main template function.
@@ -163,7 +88,7 @@
   // theorem-like environment in chapter 2".
   show heading.where(level: 1): it => {
     pagebreak(weak: true)
-    thm-counter.update(0)
+    thm-reset()
     v(1cm)
     if it.numbering != none {
       text(14pt)[Chapter #counter(heading).display("1")]

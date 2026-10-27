@@ -22,7 +22,7 @@ It is just a draft version.
 
 == Fundamental Solutions
 
-#definition(title: "Fundamental Solution")[
+#definition(note: "Fundamental Solution")[
   For the Laplace operator in $RR^3$, the *fundamental solution* is
   $ G(bold(x), bold(y)) = 1 / (4 pi |bold(x) - bold(y)|), $
   which satisfies $-Delta G(bold(x), bold(y)) = delta(bold(x) - bold(y))$
@@ -36,14 +36,14 @@ It is just a draft version.
 
 == Green's Identities
 
-#theorem(title: "Green's Second Identity")[
+#theorem(note: "Green's Second Identity")[
   For sufficiently smooth functions $u, v$ on a domain $Omega subset RR^3$
   with boundary $Gamma = partial Omega$,
   $ integral_Omega (u Delta v - v Delta u) dif Omega
     = integral_Gamma (u (partial v) / (partial n) - v (partial u) / (partial n)) dif Gamma. $
 ]
 
-#theorem(title: "Representation Formula")[
+#theorem(note: "Representation Formula")[
   If $Delta u = 0$ in $Omega$, then for $bold(x) in Omega$,
   $ u(bold(x)) = integral_Gamma
     [ G(bold(x), bold(y)) (partial u) / (partial n)(bold(y))
@@ -61,7 +61,7 @@ It is just a draft version.
 
 = Boundary Integral Equations
 
-#example(title: "Direct BEM for the Dirichlet Problem")[
+#definition(note: "Direct BEM for the Dirichlet Problem")[
   Given $u = g$ on $Gamma$, taking $bold(x) -> Gamma$ in the
   representation formula yields an integral equation for the unknown
   flux $q = partial u / partial n$:

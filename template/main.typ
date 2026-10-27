@@ -24,7 +24,7 @@ These notes were typeset with tessa.
 // Cite a bibliography entry with @key — the key comes from refs.bib.
 The presentation here follows @rudin1976.
 
-#definition(title: "Limit")[
+#definition(note: "Limit")[
   Let $f : RR -> RR$ and $a in RR$. We say $lim_(x -> a) f(x) = L$ if
   for every $epsilon > 0$ there exists $delta > 0$ such that
   $ 0 < |x - a| < delta quad ==> quad |f(x) - L| < epsilon. $
@@ -37,7 +37,7 @@ $ <eq:f>
 @eq:f
 
 
-#theorem(title: "Squeeze Theorem")[
+#theorem(note: "Squeeze Theorem")[
   If $g(x) <= f(x) <= h(x)$ near $a$ and
   $lim_(x -> a) g(x) = lim_(x -> a) h(x) = L$,
   then $lim_(x -> a) f(x) = L$.
@@ -58,12 +58,6 @@ $ <eq:f>
 ]
 
 === A worked case
-
-#example[
-  $f(x) = x^2$ is continuous everywhere, since
-  $|x^2 - a^2| = |x - a| |x + a|$ can be made small by taking $x$
-  close to $a$.
-]
 
 ==== Why no number here?
 
