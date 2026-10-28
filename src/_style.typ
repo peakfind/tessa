@@ -59,11 +59,12 @@
   set heading(numbering: "1.1.1")
 
   // Level 1: chapter -- starts a new page, "Chapter N" above the title,
-  // and resets the theorem counter so "Theorem 2.3" means "3rd
-  // theorem-like environment in chapter 2".
+  // and resets the theorem and equation counters so "Theorem 2.3" and
+  // "(2.1)" mean "in chapter 2".
   show heading.where(level: 1): it => {
     pagebreak(weak: true)
     thm-reset()
+    counter(math.equation).update(0)
     v(1cm)
     if it.numbering != none {
       text(14pt)[Chapter #counter(heading).display("1")]
@@ -85,6 +86,23 @@
   body
 }
 
+/// tessa's math style: equations numbered per chapter as (chapter.n),
+/// e.g. (2.1); plain (n) before the first chapter. The counter reset
+/// half lives in the chapter rule of tessa-heading-style.
+///
+/// Usage: `#show: tessa-math-style` (included in tessa() by default)
+#let tessa-math-style(body) = {
+  set math.equation(numbering: n => context {
+    let hc = counter(heading).get()
+    if hc.first() > 0 {
+      "(" + str(hc.first()) + "." + str(n) + ")"
+    } else {
+      "(" + str(n) + ")"
+    }
+  })
+  body
+}
+
 /// tessa's link color scheme: navy for internal navigation (citations,
 /// cross-references, TOC entries), teal for external URLs. A link's
 /// `dest` is a string for URLs and a location for internal jumps.
@@ -95,8 +113,27 @@
 ) = {
  // ---- Color for @cite, @ref, and tocs ----
   show cite: set text(navy)
-  show ref: set text(navy)
   show outline.entry: set text(navy)
+  show ref: it => {
+    let el = it.element
+    if el != none and el.func() == math.equation {
+      // Compute chapter + number AT THE TARGET's location — the element's
+      // own numbering function would evaluate its context at the REF's
+      // location and produce the wrong chapter for cross-chapter refs.
+      let c = counter(heading).at(el.location()).first()
+      let n = counter(math.equation).at(el.location()).first()
+      let label = if c > 0 { "(" + str(c) + "." + str(n) + ")" } else { "(" + str(n) + ")" }
+      link(el.location(), text(navy, label))
+    } else if el != none and el.func() == figure and el.kind == "thm" {
+      // Same trick for theorem-like environments (figures of kind "thm").
+      let c = counter(heading).at(el.location()).first()
+      let n = counter(figure.where(kind: "thm")).at(el.location()).first()
+      let num = if c > 0 { str(c) + "." + str(n) } else { str(n) }
+      link(el.location(), text(navy, el.supplement + " " + num))
+    } else {
+      text(navy, it)
+    }
+  }
   
   // ---- External URLs
   show link: it => {
