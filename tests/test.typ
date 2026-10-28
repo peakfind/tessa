@@ -20,10 +20,14 @@ A preface paragraph.
 
 = First Chapter
 @rudin1976
-#theorem[First theorem in chapter 1 — should be "Theorem 1.1".]
-#definition[First definition — shares the counter, so "Definition 1.2".]
+#theorem[First theorem in chapter 1 — should be "Theorem 1.1".] <thm:first>
+#definition[First definition — shares the counter, so "Definition 1.2".] <def:first>
 #lemma[A lemma — "Lemma 1.3".]
 #proof[A proof with a QED square at the right margin.]
+
+Cross-reference check: forward ref @def:second (defined in chapter 2),
+backward refs @thm:first and @def:first — should read "Definition 2.2",
+"Theorem 1.1", "Definition 1.2", in navy.
 
 == A Section
 
@@ -44,6 +48,8 @@ Must be UNNUMBERED and absent from the table of contents.
 // Counter must reset: this should be "Theorem 2.1", not "Theorem 2.6".
 #theorem[Counter reset check — must read "Theorem 2.1".]
 
+#definition[Forward-ref target — must read "Definition 2.2".] <def:second>
+
 == Math
 
 A numbered equation:
@@ -51,3 +57,6 @@ $ integral_a^b f(x) dif x = F(b) - F(a) $
 
 // Bibliography heading renders unnumbered as "References".
 #tessa-bib-style(style: "ieee")[#bibliography("refs.bib")]
+
+Backward cross-chapter ref: @thm:first (target in chapter 1) — should
+read "Theorem 1.1", NOT "Theorem 2.1".
