@@ -55,6 +55,16 @@ Must be UNNUMBERED and absent from the table of contents.
 A numbered equation:
 $ integral_a^b f(x) dif x = F(b) - F(a) $
 
+== Raw 
+
+Inline code `inline code`. We can also present codes in a block 
+```jl
+  x = zero(Float64)
+  for i in 1:n
+    x = i + 1 
+  end
+```
+
 // Bibliography heading renders unnumbered as "References".
 #tessa-bib-style(style: "ieee")[#bibliography("refs.bib")]
 

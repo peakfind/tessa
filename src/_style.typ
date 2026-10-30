@@ -146,6 +146,30 @@
   body
 }
 
+/// Customize the style of raw
+
+// Display inline code in a small box
+// that retains the correct baseline.
+#let tessa-raw-style(body) = {
+  show raw.where(block: false): box.with(
+    fill: luma(240),
+    inset: (x: 3pt, y: 0pt),
+    outset: (y: 3pt),
+    radius: 2pt,
+  )
+
+  // Display block code in a larger block
+  // with more padding.
+  show raw.where(block: true): block.with(
+    fill: luma(240),
+    inset: 10pt,
+    radius: 4pt,
+    width: 100%
+  )
+  body
+}
+
+
 /// Customize the style of references.
 /// `style: auto` uses tessa's own CSL asset; any other value 
 /// (built-in name or .csl path) passes through unchanged.

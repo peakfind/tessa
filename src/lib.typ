@@ -36,7 +36,7 @@
 //   _theorems.typ  theorem environments + proof
 
 #import "_pages.typ": title-page
-#import "_style.typ": tessa-heading-style, tessa-bib-style, tessa-link-style, tessa-math-style
+#import "_style.typ": tessa-heading-style, tessa-bib-style, tessa-link-style, tessa-math-style, tessa-raw-style
 #import "_theorems.typ": theorem, lemma, definition, remark, proof
 
 // ------------------------------------------------------------
@@ -84,6 +84,7 @@
   show: tessa-link-style
   // ---- Math ----
   show: tessa-math-style
+  show: tessa-raw-style
 
   // ---- Bibliography ----
   set bibliography(title: "References")
